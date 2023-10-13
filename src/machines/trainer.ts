@@ -1,5 +1,13 @@
 import { createMachine } from "xstate";
-import { positionService } from "../services/position";
+import {
+  getRandomPiece,
+  getRandomSquare,
+  positionService,
+  pronouncePiece,
+  pronounceSquare,
+} from "../services/position";
+
+import { say } from "@src/services/speech";
 
 const schema = {
   events: {} as { type: "activate" },
@@ -22,7 +30,7 @@ export const trainer = createMachine(
         always: "guessing",
       },
       guessing: {
-        entry: ["placePiece"],
+        entry: ["beginChallenge"],
       },
     },
     predictableActionArguments: true,
@@ -30,9 +38,25 @@ export const trainer = createMachine(
 
   {
     actions: {
-      placePiece() {
-        positionService.request({ piece: "wN", square: "b7" });
-        // console.log("placing piece");
+      beginChallenge() {
+        const piece = getRandomPiece();
+        const square = getRandomSquare();
+        positionService
+          .send({
+            piece,
+            square,
+          })
+          .then(() => {
+            const target = positionService.state.value.moves.target;
+
+            const challenge = `How can you move a
+             ${pronouncePiece(piece)} 
+             from
+             ${pronounceSquare(square)} 
+             to ${pronounceSquare(target)}?`;
+
+            say(challenge);
+          });
       },
     },
   }

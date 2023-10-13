@@ -11,7 +11,7 @@ export function Board() {
     state: { position },
   } = useService(positionService);
 
-  console.log(`State is`, state.value);
+  // console.log(`State is`, state.value);
 
   return (
     <Chessboard
