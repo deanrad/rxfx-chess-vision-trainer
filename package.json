@@ -10,6 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@rxfx/perception": "^1.0.1",
     "@rxfx/react": "^1.0.2",
     "@rxfx/service": "^1.2.3",
     "@xstate/react": "^3.2.2",

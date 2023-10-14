@@ -1,4 +1,5 @@
 import { after, concat, createBlockingEffect } from "@rxfx/service";
+import { THRESHOLD } from "@rxfx/perception";
 import { positionService } from "@src/services/position";
 
 export const moveEffect = createBlockingEffect<{
@@ -9,7 +10,7 @@ export const moveEffect = createBlockingEffect<{
     after(0, () => {
       positionService.request({ piece, square: step1 });
     }),
-    after(500, () => {
+    after(THRESHOLD.Thought, () => {
       positionService.request({ piece, square: step2 });
     })
   );
