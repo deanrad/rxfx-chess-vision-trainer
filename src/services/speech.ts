@@ -6,10 +6,14 @@ const speechEffect = createQueueingService<[string, number]>(
   ([text, rate]) => {
     const spoken = new SpeechSynthesisUtterance(text);
     spoken.rate = rate;
+    const done = new Promise((resolve) => {
+      spoken.onend(resolve);
+    });
     speechSynthesis.speak(spoken);
+    return done;
   }
 );
 
 export const say = (text, rate = 0.9) => {
-  speechEffect.request([text, rate]);
+  return speechEffect.send([text, rate]);
 };
