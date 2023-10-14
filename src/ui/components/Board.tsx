@@ -1,5 +1,6 @@
 import { Chessboard } from "react-chessboard";
-import { useService, use } from "@rxfx/react";
+import { useService } from "@rxfx/react";
+import { after } from "@rxfx/service";
 import { useMachine } from "@xstate/react";
 
 import { trainer } from "@src/machines/trainer";
@@ -9,13 +10,14 @@ import {
   squareColor,
 } from "@src/services/position";
 import { say } from "@src/services/speech";
-import { after } from "@rxfx/service";
+import { moveEffect } from "@src/effects/move";
 
 export function Board() {
   const [state, send] = useMachine(trainer);
   const {
-    state: { position },
+    state: { position, moves },
   } = useService(positionService);
+  const piece = Object.values(position)[0];
 
   const handleSquareClick = async (guess) => {
     if (state.matches("unactivated")) {
@@ -26,7 +28,7 @@ export function Board() {
       send("challenge.new");
     }
 
-    if (state.matches("guessing")) {
+    if (state.matches("guessable")) {
       const isCorrect = isSolution(guess);
       const msg = isCorrect
         ? `${guess}, a ${squareColor(guess)} square, is correct`
@@ -37,11 +39,15 @@ export function Board() {
       if (!isCorrect) return;
       await after(500);
 
+      // Change state to where the next click starts a new challenge
       send("guess.correct");
 
-      const alternates = positionService.state.value.moves.solutions
+      // Animate the moves
+      moveEffect.request({ piece, moves: [guess, moves.target] });
+
+      const alternates = moves.solutions
         .filter((solxn) => solxn !== guess)
-        .filter(() => Object.values(position)[0][1] !== "Q");
+        .filter(() => piece[1] !== "Q");
 
       const alternateMsg = alternates.length
         ? `${alternates.join(" and ")} ${

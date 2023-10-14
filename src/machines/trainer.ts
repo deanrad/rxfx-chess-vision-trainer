@@ -18,7 +18,7 @@ const schema = {
 
 export const trainer = createMachine(
   {
-    /** @xstate-layout N4IgpgJg5mDOIC5QBcBOBDAlgOzKgdAK7boDGymAbuspAMRkXW0DaADALqKgAOA9rEwU+2biAAeiAIwAOAEz4pAFgDMcqQDYA7HK0BOFXo0AaEAE9pbJfgCsGo0pl69NpVqlyAvp9NosuAkYqGnp2LiQQfkFhUQjJBCU5ay0bQzYpKS0NQxkVUwsEKTYNfDYtNjlnFVyNKT0tb18MHDx8KEI4QWwoOnbO-FI+VFQwcjCxKKFMETF41JtbeXs5JyUPVPzpBQyDJJti5bYVRpA-FoIwcR4AG396UgALdGvrsG6wfFwAd3GIyZjZogtPJ8DINGDqlZtDYZFJNoU5CV9rUNGw9ElgTZ0d4fCBsHwIHAxGcAhMBFMZnFEABaEzmGkpWwqOwpdyuAzY3Ek1rEILMSBk6LTWKgeKJeFFZIqLK6erolZ6GQnbmBcjBWgQQUUkUSRAqCqg4FODRJWpouQSqz4LTSk36fRyBU2ZXNAJtDqwLpQLUAqkIGx1RS1JSuLRuNQ2+Gw-BqSrqNgJ7RyAMuu4XK63Fqav7k32ioHqGMyMFlQyxpR6CVSa0yHTowy1XJaG04zxAA */
+    /** @xstate-layout N4IgpgJg5mDOIC5QBcBOBDAlgOzKgdAK7boDGymAbuspAMRkXW0DaADALqKgAOA9rEwU+2biAAeiAIwAOAEz4pAFgDMcqQDYA7HK0BOFXo0AaEAE9pbJfgCsGo0pl69NpVqlyAvp9NosuAkYqGnp2LiQQfkFhUQjJBCU5ay0bQzYpKS0NQxkVUwsEKTYNfDYtNjlnFVyNKT0tb18MHDx8KEI4WHQAIwAbMDp2zvxSPlRUMHIwsSihTBExeNqpfHKbFzs5JzY880RXUqlUtjKPDXVDDUaQPxaCMHEeXv96UgALdF7+7Bh8XAB3aYRWYxRaIGRaFSKNguAxKWROPRKfKIdQ2UrZGQaVJHJxyGwNa7YPgQOBiW4BGYCOYLOKIAC0Jj2CHpKVsKjsqjcymxRmuFNaxCCzEgVOi81ioHiiRRhSsqxUWV09T0ci2ehk-OaAXwwpCEDFNMlEkQKgq+AhMic5yUtRhcllRWSivO+n0aqcNi1LwIQ1gXT6YENoLpCFc6KUVltjkyUhUGhkjo8pW2WPWbkM3ru+AeTxeBuB1JDUsQOhW1SxZUMaiSeiTqwhlTkl1kish3m8QA */
     id: "trainer",
     initial: "unactivated",
     schema,
@@ -30,16 +30,16 @@ export const trainer = createMachine(
         },
       },
       activated: {
-        always: "guessing",
+        always: "guessable",
       },
-      guessing: {
+      guessable: {
         entry: ["beginChallenge"],
         on: {
           "guess.correct": "explained",
         },
       },
       explained: {
-        on: { "challenge.new": "guessing" },
+        on: { "challenge.new": "guessable" },
       },
     },
     predictableActionArguments: true,
