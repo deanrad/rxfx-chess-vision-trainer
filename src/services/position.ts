@@ -10,6 +10,7 @@ const RANKS = "12345678";
 const FILES = "abcdefgh";
 const random = (arr) => arr[Math.floor(Math.random() * arr.length)];
 const COLOR = "w";
+const chessjs = new Chess();
 export const pronounceSquare = (square) => `${square[0]}-${square[1]}`;
 
 /* ChatGPT wrote this function for me, mostly ! */
@@ -25,6 +26,8 @@ export const pronouncePiece = ([_, abbrev]) => {
   return pieceAbbreviations[abbrev] || "Pawn";
 };
 
+export const squareColor = (square) => chessjs.squareColor(square);
+
 export const getRandomSquare = () => `${random(FILES)}${random(RANKS)}`;
 export const getRandomPiece = () => `${COLOR}${random(PIECES)}`;
 
@@ -35,6 +38,7 @@ const initialState = {
   moves: {
     first: [],
     second: [],
+    solutions: [],
     target: null,
   },
 };
@@ -53,6 +57,10 @@ const positionReducer: ReducerProducer<
       const secondMoves = getSecondMoves(piece, square, firstMoves);
       const target = random(secondMoves);
 
+      const solutions = firstMoves.filter((from) =>
+        movesOfSoloPiece(piece, from).includes(target)
+      );
+
       return {
         position: {
           [square]: piece,
@@ -60,6 +68,7 @@ const positionReducer: ReducerProducer<
         moves: {
           first: firstMoves,
           second: secondMoves,
+          solutions,
           target,
         },
       };
@@ -77,7 +86,10 @@ export const positionService = createService(
   positionReducer
 );
 
-export const chessjs = new Chess();
+export function isSolution(guess) {
+  const { solutions } = positionService.state.value.moves;
+  return solutions.includes(guess);
+}
 
 function movesOfSoloPiece(piece, square) {
   const [color, type] = piece;

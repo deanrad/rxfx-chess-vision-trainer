@@ -10,12 +10,15 @@ import {
 import { say } from "@src/services/speech";
 
 const schema = {
-  events: {} as { type: "activate" },
+  events: {} as
+    | { type: "activate" }
+    | { type: "guess.correct" }
+    | { type: "challenge.new" },
 };
 
 export const trainer = createMachine(
   {
-    /** @xstate-layout N4IgpgJg5mDOIC5QBcBOBDAlgOzKgdAK7boDGymAbuspAMRkXW0DaADALqKgAOA9rEwU+2biAAeiAIwAOAEz4pAFgDMcqQDYA7HK0BOFXo0AaEAE9pbJfgCsGo0pl69NpVqlyAvp9NosuAkYqGnp2LiQQfkFhUQjJBCU5ay0bQzYpKS0NQxkVUwsEKTYNfDYtNjlnFVyNKT0tbx8QbD4IODE-HDwxKKFMETF4gFoTc0QR718MLoJiIOZIHoE+gbjERPzLZJUs3Xq9OTknGUmQToD8eZCIJej+2NB4lQr8GS0ZJw0k2rYDzcKrPgtDsvvp9IcnDZTuc8PgoIQ4IJsFBbisHhJEDY6opakpXFo3Gpgf8ZFJ8GpKuo2NTtHIsY1PEA */
+    /** @xstate-layout N4IgpgJg5mDOIC5QBcBOBDAlgOzKgdAK7boDGymAbuspAMRkXW0DaADALqKgAOA9rEwU+2biAAeiAIwAOAEz4pAFgDMcqQDYA7HK0BOFXo0AaEAE9pbJfgCsGo0pl69NpVqlyAvp9NosuAkYqGnp2LiQQfkFhUQjJBCU5ay0bQzYpKS0NQxkVUwsEKTYNfDYtNjlnFVyNKT0tb18MHDx8KEI4QWwoOnbO-FI+VFQwcjCxKKFMETF41JtbeXs5JyUPVPzpBQyDJJti5bYVRpA-FoIwcR4AG396UgALdGvrsG6wfFwAd3GIyZjZogtPJ8DINGDqlZtDYZFJNoU5CV9rUNGw9ElgTZ0d4fCBsHwIHAxGcAhMBFMZnFEABaEzmGkpWwqOwpdyuAzY3Ek1rEILMSBk6LTWKgeKJeFFZIqLK6erolZ6GQnbmBcjBWgQQUUkUSRAqCqg4FODRJWpouQSqz4LTSk36fRyBU2ZXNAJtDqwLpQLUAqkIGx1RS1JSuLRuNQ2+Gw-BqSrqNgJ7RyAMuu4XK63Fqav7k32ioHqGMyMFlQyxpR6CVSa0yHTowy1XJaG04zxAA */
     id: "trainer",
     initial: "unactivated",
     schema,
@@ -31,6 +34,12 @@ export const trainer = createMachine(
       },
       guessing: {
         entry: ["beginChallenge"],
+        on: {
+          "guess.correct": "explained",
+        },
+      },
+      explained: {
+        on: { "challenge.new": "guessing" },
       },
     },
     predictableActionArguments: true,
@@ -38,25 +47,21 @@ export const trainer = createMachine(
 
   {
     actions: {
-      beginChallenge() {
-        const piece = getRandomPiece();
-        const square = getRandomSquare();
-        positionService
-          .send({
-            piece,
-            square,
-          })
-          .then(() => {
-            const target = positionService.state.value.moves.target;
+      async beginChallenge() {
+        const [piece, square] = [getRandomPiece(), getRandomSquare()];
 
-            const challenge = `How can you move a
-             ${pronouncePiece(piece)} 
-             from
-             ${pronounceSquare(square)} 
-             to ${pronounceSquare(target)}?`;
+        await positionService.send({
+          piece,
+          square,
+        });
 
-            say(challenge);
-          });
+        const target = positionService.state.value.moves.target;
+
+        say(`How can you move a
+          ${pronouncePiece(piece)} 
+          from
+          ${pronounceSquare(square)} 
+          to ${pronounceSquare(target)}?`);
       },
     },
   }
