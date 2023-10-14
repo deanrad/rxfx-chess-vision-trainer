@@ -11,7 +11,11 @@ const FILES = "abcdefgh";
 const random = (arr) => arr[Math.floor(Math.random() * arr.length)];
 const COLOR = "w";
 const chessjs = new Chess();
-export const pronounceSquare = (square) => `${square[0]}-${square[1]}`;
+export const pronounceSquare = (square) => {
+  const file = square[0] === "a" ? "ae" : square[0];
+  const rank = square[1];
+  return `${file} ${rank}`;
+};
 
 /* ChatGPT wrote this function for me, mostly ! */
 export const pronouncePiece = ([_, abbrev]) => {

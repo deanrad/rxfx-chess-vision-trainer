@@ -8,6 +8,7 @@ import {
   positionService,
   isSolution,
   squareColor,
+  pronounceSquare,
 } from "@src/services/position";
 import { say } from "@src/services/speech";
 import { moveEffect } from "@src/effects/move";
@@ -31,8 +32,9 @@ export function Board() {
     if (state.matches("guessable")) {
       const isCorrect = isSolution(guess);
       const msg = isCorrect
-        ? `${guess}, a ${squareColor(guess)} square, is correct`
-        : `${guess} is not correct`;
+        ? `${pronounceSquare(guess)}, 
+        a ${squareColor(guess)} square, is correct`
+        : `${pronounceSquare(guess)} is not correct`;
 
       say(msg);
 
