@@ -4,7 +4,7 @@ import { Board as ChessBoard } from "./ui/components/Board";
 function App() {
   return (
     <>
-      <h1>Chess Notation Trainer</h1>
+      <h1>Chess Vision Trainer</h1>
       <ChessBoard />
       <p>
         Instructions: With sound on, and not looking at the board, tap or click

@@ -7,7 +7,7 @@ const speechEffect = createQueueingService<[string, number]>(
     const spoken = new SpeechSynthesisUtterance(text);
     spoken.rate = rate;
     const done = new Promise((resolve) => {
-      spoken.onend(resolve);
+      spoken.onend = resolve;
     });
     speechSynthesis.speak(spoken);
     return done;
