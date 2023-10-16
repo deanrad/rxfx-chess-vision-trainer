@@ -10,3 +10,22 @@
 [data-boardid="chessboard"] svg {
   visibility: var(--piece-visibility);
 }
+
+.header {
+  display: flex;
+  flex-direction: row;
+}
+
+.controls {
+  width: 30vw;
+}
+
+.control {
+  display: flex;
+  flex-direction: row;
+}
+
+.tagline {
+  width: 70vw;
+  font-style: italic;
+}

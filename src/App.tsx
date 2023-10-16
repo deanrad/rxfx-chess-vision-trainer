@@ -4,6 +4,8 @@ import { Controls } from "./ui/components/Controls";
 import { BLINDFOLD_TOGGLE } from "./events/controls";
 import { useWhileMounted } from "@rxfx/react";
 import { defaultBus } from "@rxfx/service";
+import { trainer } from "./machines/trainer";
+import { handleSquareClick } from "./handlers/handleSquareClick";
 
 function App() {
   useWhileMounted(() =>
@@ -20,19 +22,18 @@ function App() {
   return (
     <>
       <h1>Chess Vision Trainer</h1>
-      <div>
+      <header className="header">
         <Controls />
-      </div>
+        <div className="tagline" onClick={() => handleSquareClick("")}>
+          Click or tap for a new puzzle!! ♛
+        </div>
+      </header>
       <Board />
       <p>
-        Instructions: With sound on, tap or click to hear a challenge of how to
-        move a piece, given in algebraic chess notation. Then decide upon and
-        click the square the piece must first move to in order to reach the
-        target.
-      </p>
-      <p>
-        For extra credit, try blindfold mode, guessing both the square and its
-        color.
+        Instructions: With sound on, click or tap to hear a challenge of how to
+        move a piece, in algebraic chess notation. Then decide upon and click
+        the square the piece must first move to in order to reach the target.
+        Try hiding the notation or piece, playing blind, if you dare!
       </p>
     </>
   );
