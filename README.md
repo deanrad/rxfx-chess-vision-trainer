@@ -1,27 +1,28 @@
-# React + TypeScript + Vite
+# 𝗥𝘅𝑓𝑥 Chess Vision Trainer
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+# Architecture
 
-Currently, two official plugins are available:
+The following libraries are used to build this site:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- Vite - For running a dev server, and building the app.
+- Typescript - For a less error-prone coding experience.
+- React - For turning objects into DOM, via JSX.
+- 𝗥𝘅𝑓𝑥 - For decoupling components, handling effects like speech, and for avoiding prop-drilling.
+- Redux - For state management and persistenece.
+- XState - For the overall game flow.
+- `vite-plugin-pwa` - For building the app to be able to work offline.
 
-## Expanding the ESLint configuration
+## Folder Structure
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+- `ui/components` - (React) Any React component lives here. Note these tend to be very simple and limited to a) triggering events b)  _This means that folders outside of this one are framework-agnostic, pure JS/TS!!_
 
-- Configure the top-level `parserOptions` property like this:
+- `machines` - (XState) The `trainer` state-machine that controls the overall game flow lives here.
 
-```js
-   parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-   },
-```
+- `events` - (JS) The strongly-typed events that `<Controls>` raises are defined here.
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+- `services` - (RxFx) Bus listeners like `positionService` - which tracks the piece's position and options - lives here
+
+- `effects` - (RxFx) The `speechEffect` that handles speech synthesis, and the `moveEffect` which animates the correct move, live here.
+
+
+Keep in mind that some modules depend on each other directly, while others are connected through the events they publish to, or subscribe from the Event Bus.

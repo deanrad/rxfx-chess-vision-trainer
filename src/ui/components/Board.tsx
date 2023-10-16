@@ -12,7 +12,7 @@ import {
   squareColor,
   pronounceSquare,
 } from "@src/services/position";
-import { say } from "@src/services/speech";
+import { say } from "@src/effects/speech";
 import { moveEffect } from "@src/effects/move";
 
 export function Board() {

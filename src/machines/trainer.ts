@@ -7,7 +7,7 @@ import {
   pronounceSquare,
 } from "../services/position";
 
-import { say } from "@src/services/speech";
+import { say } from "@src/effects/speech";
 
 const schema = {
   events: {} as
