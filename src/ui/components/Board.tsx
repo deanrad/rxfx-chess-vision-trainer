@@ -60,5 +60,11 @@ export function Board() {
     }
   };
 
-  return <Chessboard position={position} onSquareClick={handleSquareClick} />;
+  return (
+    <Chessboard
+      id="chessboard"
+      position={position}
+      onSquareClick={handleSquareClick}
+    />
+  );
 }
