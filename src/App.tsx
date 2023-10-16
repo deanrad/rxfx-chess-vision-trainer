@@ -4,7 +4,6 @@ import { Controls } from "./ui/components/Controls";
 import { BLINDFOLD_TOGGLE } from "./events/controls";
 import { useWhileMounted } from "@rxfx/react";
 import { defaultBus } from "@rxfx/service";
-import { trainer } from "./machines/trainer";
 import { handleSquareClick } from "./handlers/handleSquareClick";
 
 function App() {
