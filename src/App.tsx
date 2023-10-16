@@ -1,7 +1,7 @@
-import { ChakraProvider } from "@chakra-ui/react";
 import "./App.css";
 import { Board } from "./ui/components/Board";
-import { Controls, BLINDFOLD_TOGGLE } from "./ui/components/Controls";
+import { Controls } from "./ui/components/Controls";
+import { BLINDFOLD_TOGGLE } from "./events/controls";
 import { useWhileMounted } from "@rxfx/react";
 import { defaultBus } from "@rxfx/service";
 
@@ -18,7 +18,7 @@ function App() {
   );
 
   return (
-    <ChakraProvider>
+    <>
       <h1>Chess Vision Trainer</h1>
       <p>
         <Controls />
@@ -34,7 +34,7 @@ function App() {
         For extra credit, try blindfold mode, guessing both the square and its
         color.
       </p>
-    </ChakraProvider>
+    </>
   );
 }
 

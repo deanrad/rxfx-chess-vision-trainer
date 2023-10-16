@@ -1,9 +1,11 @@
+import { useState } from "react";
 import { Chessboard } from "react-chessboard";
-import { useService } from "@rxfx/react";
-import { after } from "@rxfx/service";
+import { useService, useWhileMounted } from "@rxfx/react";
+import { after, defaultBus } from "@rxfx/service";
 import { useMachine } from "@xstate/react";
 
 import { trainer } from "@src/machines/trainer";
+import { NOTATION_TOGGLE } from "@src/events/controls";
 import {
   positionService,
   isSolution,
@@ -14,6 +16,14 @@ import { say } from "@src/services/speech";
 import { moveEffect } from "@src/effects/move";
 
 export function Board() {
+  const [hideNotation, setHideNotation] = useState(false);
+
+  useWhileMounted(() =>
+    defaultBus.listen(NOTATION_TOGGLE, ({ payload: hide }) => {
+      setHideNotation(hide);
+    })
+  );
+
   const [state, send] = useMachine(trainer);
   const {
     state: { position, moves },
@@ -65,6 +75,7 @@ export function Board() {
       id="chessboard"
       position={position}
       onSquareClick={handleSquareClick}
+      showBoardNotation={!hideNotation}
     />
   );
 }

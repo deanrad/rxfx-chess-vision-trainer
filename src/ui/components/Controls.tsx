@@ -1,25 +1,23 @@
-import { FormControl, FormLabel, Switch } from "@chakra-ui/react";
+import { ToggleSlider } from "react-toggle-slider";
 
-import { defaultBus, createEvent } from "@rxfx/service";
-
-defaultBus.spy(({ type, payload }) => console.log(type, payload));
-
-export const BLINDFOLD_TOGGLE = createEvent<boolean>("control/blindfold");
+import { defaultBus } from "@rxfx/service";
+import { NOTATION_TOGGLE, BLINDFOLD_TOGGLE } from "@src/events/controls";
 
 export function Controls() {
   return (
     <div>
-      <FormControl display="flex" alignItems="center">
-        <FormLabel htmlFor="blindfold-mode" mb="0">
-          Blindfold Mode
-        </FormLabel>
-        <Switch
-          id="blindfold-mode"
-          onChange={({ target }) =>
-            defaultBus.trigger(BLINDFOLD_TOGGLE(target.checked))
-          }
+      <div style={{ display: "flex", flexDirection: "row" }}>
+        <ToggleSlider
+          onToggle={(state) => defaultBus.trigger(NOTATION_TOGGLE(state))}
         />
-      </FormControl>
+        <label htmlFor="blindfold-mode">&nbsp;Hide Notation</label>
+      </div>
+      <div style={{ display: "flex", flexDirection: "row" }}>
+        <ToggleSlider
+          onToggle={(state) => defaultBus.trigger(BLINDFOLD_TOGGLE(state))}
+        />
+        <label htmlFor="blindfold-mode">&nbsp;Blindfold Mode</label>
+      </div>
     </div>
   );
 }
