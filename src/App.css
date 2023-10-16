@@ -4,6 +4,11 @@
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
+  --piece-visibility: visible;
+}
+
+[data-boardid="chessboard"] svg {
+  visibility: var(--piece-visibility);
 }
 
 .logo {
