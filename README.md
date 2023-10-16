@@ -20,6 +20,8 @@ The following libraries are used to build this site:
 
 - `events` - (JS) The strongly-typed events that `<Controls>` raises are defined here.
 
+- `handlers` - (JS) Event handlers can live here, if they do not close over any state of a React component.
+
 - `services` - (RxFx) Bus listeners like `positionService` - which tracks the piece's position and options - lives here
 
 - `effects` - (RxFx) The `speechEffect` that handles speech synthesis, and the `moveEffect` which animates the correct move, live here.

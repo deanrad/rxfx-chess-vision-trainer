@@ -20,15 +20,15 @@ function App() {
   return (
     <>
       <h1>Chess Vision Trainer</h1>
-      <p>
+      <div>
         <Controls />
-      </p>
+      </div>
       <Board />
       <p>
         Instructions: With sound on, tap or click to hear a challenge of how to
         move a piece, given in algebraic chess notation. Then decide upon and
         click the square the piece must first move to in order to reach the
-        target. For a new challenge, click the board again!
+        target.
       </p>
       <p>
         For extra credit, try blindfold mode, guessing both the square and its
