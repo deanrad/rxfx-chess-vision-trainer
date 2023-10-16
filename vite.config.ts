@@ -15,14 +15,26 @@ const pwaOptions: Partial<VitePWAOptions> = {
     theme_color: "#ffffff",
     icons: [
       {
-        src: "vision-icon-192.png",
+        src: "pwa-64x64.png",
+        sizes: "64x64",
+        type: "image/png",
+      },
+      {
+        src: "pwa-192x192.png",
         sizes: "192x192",
         type: "image/png",
       },
       {
-        src: "vision-icon-128.png",
-        sizes: "128x128",
+        src: "pwa-512x512.png",
+        sizes: "512x512",
         type: "image/png",
+        purpose: "any",
+      },
+      {
+        src: "maskable-icon-512x512.png",
+        sizes: "512x512",
+        type: "image/png",
+        purpose: "maskable",
       },
     ],
   },
