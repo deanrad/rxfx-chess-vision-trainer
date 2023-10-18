@@ -14,7 +14,7 @@ The following libraries are used to build this site:
 
 ## Folder Structure
 
-- `ui/components` - (React) Any React component lives here. Note these tend to be very simple and limited to a) triggering events b)  _This means that folders outside of this one are framework-agnostic, pure JS/TS!!_
+- `ui/components` - (React) Any React component lives here. Note these tend to be very simple and limited to a) triggering events b) _This means that folders outside of this one are framework-agnostic, pure JS/TS!!_
 
 - `machines` - (XState) The `trainer` state-machine that controls the overall game flow lives here.
 
@@ -22,21 +22,60 @@ The following libraries are used to build this site:
 
 - `handlers` - (JS) Event handlers can live here, if they do not close over any state of a React component.
 
-- `services` - (RxFx) Bus listeners like `positionService` - which tracks the piece's position and options - lives here
+- `services` - (𝗥𝘅𝑓𝑥) Bus listeners like `positionService` - which tracks the piece's position and options - lives here
 
-- `effects` - (RxFx) The `speechEffect` that handles speech synthesis, and the `moveEffect` which animates the correct move, live here.
-
+- `effects` - (𝗥𝘅𝑓𝑥) The `speechEffect` that handles speech synthesis, and the `moveEffect` which animates the correct move, live here.
 
 ## Why an Event Bus?
+
 React components, and code modules in general, can be decoupled, and prop-drilling minimized or eliminated, when they share events over the Event Bus.
 
 ### Example - Toggling Notation
 
 For showing/hiding the labels of the squares, the `<Board>` component can pass `react-chessboard` a prop called `showBoardNotation`. Therefore, it owns a piece of state that it can pass down. The question is - since it is `<Controls>` that owns the toggle switch - how are the toggle events getting from `<Controls>` to the `<Board>`?
 
-In RxFx Event Bus style, `<Board>` subscribes to the `NOTATION_TOGGLE` event. That event is imported, and triggered by `<Controls>`, meanwhile `<Board>` imports the event, and listens for it, remaining unaware of where the event comes from. 
+If using local state in React — a typical style — a state variable must exist in a parent level component. The setter is then passed to `<Controls>`, and the state variable as a prop to `<Board>`
 
-This makes testing of `Board` in isolation very straightforward - neither the parent `<App>` not `<Controls>` are necessary! Also, the markup can remain simple, with the parent not needing to pass functions or own state.
+```jsx
+// App.tsx
+function App() {
+  const [showBoardNotation, setShowBoardNotation] = useState(true)
+
+  return (
+    <header>
+      <Controls onNotationSet={setShowBoardNotation} />
+    </header>
+    <Board showBoardNotation={showBoardNotation}/>
+  )
+}
+```
+
+Imagine how the prop list, and clutter in the parent component grows, as the children add more variables! And testing becomes harder, and in practice it gets short-changed because of its difficulty. Is there a better way for `<Controls>` and `<Board>` to communicate, keeping `<App>` focused on its layout concern only?
+
+In 𝗥𝘅𝑓𝑥 Event Bus style, `<Board>` subscribes to a `NOTATION_TOGGLE` event, which `<Controls>` places on a global instance of the event bus. The `boolean`-typed event creator function is imported by `<Controls>`, while `<Board>` imports the event, and listens for it.
+
+```jsx
+// events/controls.ts
+export const NOTATION_TOGGLE = createEvent<boolean>()
+
+// ui/components/Controls.tsx
+   <ToggleSlider
+      onToggle={(state) => defaultBus.trigger(NOTATION_TOGGLE(state))}
+   />
+```
+
+```jsx
+export function Board() {
+  const [hideNotation, setHideNotation] = useState(false);
+
+  useWhileMounted(() =>
+    defaultBus.listen(NOTATION_TOGGLE, ({ payload: hide }) => {
+      setHideNotation(hide);
+    })
+  );
+```
+
+This allows `<App>` to remain simple.
 
 ```jsx
 // App.tsx
@@ -47,7 +86,13 @@ This makes testing of `Board` in isolation very straightforward - neither the pa
 
 ```
 
-Aside from the lack of prop-drilling, React Context is also not needed. Both of these are common causes of excessive re-rendering, so app performance can be higher. (Similar benefits can be found with Signals as well).
+It also makes testing of `<Controls>` in isolation very straightforward - neither the parent `<App>` not `<Board>` are necessary - just assert that `<Controls>` puts the correct events on the event bus when toggled!
+
+Could React Context do the same thing? Perhaps, but it's got its own drawbacks - the need for a `Provider` at the top level, and Context is a frequent cause of over-rendering which hurts performance.
+
+Redux would bring a similar benefit, however, with `<Controls>` dispatching an action (event), and `<Board>` subscribing to it directly without `<App>` needing to help. The event bus architecture is isomporphic to Redux, and event bus events made via `createEvent` are suitable for passing direct to Redux, so a Redux store can be a listener to events.
+
+Use Redux when the piece of state must be persisted — use events when it is mainly the effect you need.
 
 ### Example - Toggling Piece visibility
 
@@ -55,7 +100,7 @@ The `react-chessboard` library does not have a prop to control piece visibility,
 
 ```css
 [data-boardid="chessboard"] svg {
-  visibility: 'hidden';
+  visibility: "hidden";
 }
 ```
 
@@ -72,13 +117,14 @@ But how do we make that dynamic? One option would be to make its value based on 
 ```
 
 The setting code is simply:
+
 ```js
-document.querySelector("#root")
-  .style
-  .setProperty("--piece-visibility", "hidden")
+document
+  .querySelector("#root")
+  .style.setProperty("--piece-visibility", "hidden");
 ```
 
-This will work, but now we must consider where to execute this code. I suggest not doing it in the control itself. Like the code that toggles notation, the job of the control should simply be to trigger the event. This allows us to decouple WHAT occurred (the visibility was toggled), from HOW it gets done, and keeps the `<Controls>` UI component simple and testable.
+This will work, but now we must consider where to execute this code. I suggest not doing it in the control itself. The job of the control should simply be to trigger the event. This allows us to decouple WHAT occurred (the visibility was toggled), from HOW it gets done, and keeps the `<Controls>` UI component simple and testable.
 
 ```jsx
 // Controls.tsx
@@ -108,7 +154,6 @@ function App() {
 
 We have type-safety from the `BLINDFOLD_TOGGLE` event typing its payload as `boolean`. And we have runtime safety in that the listener will be shut down when the component unmounts, thanks to the `useWhileMounted` hook.
 
-Now, we see how events decouple components, simplify communication, and provide type-safety without prop-drilling. 
+Now, we see how events decouple components, simplify communication, and provide type-safety without prop-drilling.
 
 The advantage of this style of React is as advantageous as the invention of Promises. Think about how Promises allowed you to no longer pass callbacks in to functions. In React, since components are just functions, why not be able to handle their events from the outside without their knowing? This is like Angular output variable, or signals, and results in a less cluttered, and more testable view layer.
-
