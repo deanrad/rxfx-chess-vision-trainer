@@ -1,10 +1,11 @@
-import "./App.css";
-import { Board } from "./ui/components/Board";
-import { Controls } from "./ui/components/Controls";
-import { BLINDFOLD_TOGGLE } from "./events/controls";
+import { ChakraProvider } from "@chakra-ui/react";
 import { useWhileMounted } from "@rxfx/react";
 import { defaultBus } from "@rxfx/service";
+import "./App.css";
+import { BLINDFOLD_TOGGLE } from "./events/controls";
 import { handleSquareClick } from "./handlers/handleSquareClick";
+import { Board } from "./ui/components/Board";
+import { Controls } from "./ui/components/Controls";
 
 function App() {
   useWhileMounted(() =>
@@ -19,7 +20,7 @@ function App() {
   );
 
   return (
-    <>
+    <ChakraProvider>
       <h1>Chess Vision Trainer</h1>
       <header className="header">
         <Controls />
@@ -34,7 +35,7 @@ function App() {
         the square the piece must first move to in order to reach the target.
         Try hiding the notation or piece, playing blind, if you dare!
       </p>
-    </>
+    </ChakraProvider>
   );
 }
 

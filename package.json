@@ -14,15 +14,18 @@
     "generate-pwa-assets": "pwa-assets-generator"
   },
   "dependencies": {
+    "@chakra-ui/react": "^2.8.1",
+    "@emotion/react": "^11",
+    "@emotion/styled": "^11",
     "@rxfx/perception": "^1.0.1",
     "@rxfx/react": "^1.0.2",
     "@rxfx/service": "^1.2.3",
     "@xstate/react": "^3.2.2",
     "chess.js": "^1.0.0-beta.6",
+    "framer-motion": "^6",
     "react": "^18.2.0",
     "react-chessboard": "^4.2.3",
     "react-dom": "^18.2.0",
-    "react-toggle-slider": "^0.4.0",
     "xstate": "^4.38.2"
   },
   "devDependencies": {
