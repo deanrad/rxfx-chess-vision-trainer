@@ -10,7 +10,9 @@ export function Controls() {
         <ToggleSlider
           onToggle={(state) => defaultBus.trigger(NOTATION_TOGGLE(state))}
         />
-        <label htmlFor="blindfold-mode">&nbsp;Hide Notation</label>
+        <label htmlFor="blindfold-mode" id="blindfold-mode">
+          &nbsp;Hide Notation
+        </label>
       </div>
       <div className="control">
         <ToggleSlider
