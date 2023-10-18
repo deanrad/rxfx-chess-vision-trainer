@@ -6,7 +6,7 @@ import {
   pronounceSquare,
   positionService,
 } from "@src/services/position";
-import { say } from "@src/effects/speech";
+import { say, speechEffect } from "@src/effects/speech";
 import { moveEffect } from "@src/effects/move";
 
 const getState = () => trainer.getSnapshot();
@@ -33,7 +33,12 @@ export const handleSquareClick = async (guess: string) => {
       a ${squareColor(guess)} square, is correct`
       : `${pronounceSquare(guess)} is not correct`;
 
-    say(msg);
+    if (isCorrect) {
+      speechEffect.cancelCurrent();
+      say(msg);
+    } else if (!speechEffect.isActive.value) {
+      say(msg);
+    }
 
     if (!isCorrect) return;
     await after(500);
