@@ -12,7 +12,7 @@ import { moveEffect } from "@src/effects/move";
 const getState = () => trainer.getSnapshot();
 
 export const handleSquareClick = async (guess: string) => {
-  const { position, moves } = positionService.state.value;
+  const { position, moves, target } = positionService.state.value;
 
   const piece = Object.values(position)[0] as string;
 
@@ -47,7 +47,7 @@ export const handleSquareClick = async (guess: string) => {
     trainer.send("guess.correct");
 
     // Animate the moves
-    moveEffect.request({ piece, moves: [guess, moves.target] });
+    moveEffect.request({ piece, moves: [guess, target] });
 
     const alternates = moves.solutions
       .filter((solxn) => solxn !== guess)

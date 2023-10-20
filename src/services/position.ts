@@ -43,12 +43,13 @@ const initialState = {
     first: [],
     second: [],
     solutions: [],
-    target: null,
   },
+  target: null,
+  puzzleTitle: null,
 };
 
 const positionReducer: ReducerProducer<
-  { piece: string; square: string },
+  { piece: string; square: string, setTitle?: boolean },
   null,
   null,
   typeof initialState
@@ -56,7 +57,7 @@ const positionReducer: ReducerProducer<
   ({ request }) =>
   (state = initialState, event) => {
     if (request.match(event)) {
-      const { piece, square } = event.payload;
+      const { piece, square, setTitle } = event.payload;
       const firstMoves = movesOfSoloPiece(piece, square);
       const secondMoves = getSecondMoves(piece, square, firstMoves);
       const target = random(secondMoves);
@@ -64,6 +65,10 @@ const positionReducer: ReducerProducer<
       const solutions = firstMoves.filter((from) =>
         movesOfSoloPiece(piece, from).includes(target)
       );
+
+            const newTitle = setTitle
+        ? `Move ${pronouncePiece(piece)} from ${square} to ${target}`
+        : state.puzzleTitle;
 
       return {
         position: {
@@ -73,8 +78,9 @@ const positionReducer: ReducerProducer<
           first: firstMoves,
           second: secondMoves,
           solutions,
-          target,
         },
+        target,
+        puzzleTitle: newTitle
       };
     }
     // else

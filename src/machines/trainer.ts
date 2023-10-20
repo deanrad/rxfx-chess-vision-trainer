@@ -53,9 +53,10 @@ const trainerMachine = createMachine(
         await positionService.send({
           piece,
           square,
+          setTitle: true
         });
 
-        const target = positionService.state.value.moves.target;
+        const {target} = positionService.state.value;
 
         say(`How can you move a
           ${pronouncePiece(piece)} 

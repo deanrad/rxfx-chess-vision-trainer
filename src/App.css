@@ -16,6 +16,10 @@
   flex-direction: row;
 }
 
+.puzzle-title {
+  height: 2rem;
+}
+
 .controls {
   width: 30vw;
 }

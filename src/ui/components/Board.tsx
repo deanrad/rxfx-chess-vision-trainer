@@ -17,15 +17,20 @@ export function Board() {
   );
 
   const {
-    state: { position },
+    state: { position, puzzleTitle },
   } = useService(positionService);
 
   return (
-    <Chessboard
-      id="chessboard"
-      position={position}
-      onSquareClick={handleSquareClick}
-      showBoardNotation={!hideNotation}
-    />
+    <div>
+      <h2 className="puzzle-title">
+        {puzzleTitle ? `Challenge: ${puzzleTitle}` : ""}
+      </h2>
+      <Chessboard
+        id="chessboard"
+        position={position}
+        onSquareClick={handleSquareClick}
+        showBoardNotation={!hideNotation}
+      />
+    </div>
   );
 }
