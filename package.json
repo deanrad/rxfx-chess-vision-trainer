@@ -19,7 +19,7 @@
     "@emotion/styled": "^11",
     "@rxfx/perception": "^1.0.1",
     "@rxfx/react": "^1.0.2",
-    "@rxfx/service": "^1.2.3",
+    "@rxfx/service": "^1.3.0",
     "@xstate/react": "^3.2.2",
     "chess.js": "^1.0.0-beta.6",
     "framer-motion": "^6",

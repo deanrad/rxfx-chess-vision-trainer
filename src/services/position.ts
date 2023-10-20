@@ -1,6 +1,5 @@
 import {
   createService,
-  defaultBus as bus,
   ReducerProducer,
 } from "@rxfx/service";
 import { Chess } from "chess.js";
@@ -91,7 +90,6 @@ const positionEffect = () => Promise.resolve();
 
 export const positionService = createService(
   "position",
-  bus,
   positionEffect,
   positionReducer
 );
