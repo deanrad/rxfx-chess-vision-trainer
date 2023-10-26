@@ -20,13 +20,11 @@
   height: 2rem;
 }
 
-.controls {
-  width: 30vw;
-}
-
 .control {
   display: flex;
   flex-direction: row;
+  width: 30vw;
+  white-space: nowrap;
 }
 
 .tagline {

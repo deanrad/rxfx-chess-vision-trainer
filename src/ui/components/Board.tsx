@@ -3,16 +3,23 @@ import { defaultBus } from "@rxfx/service";
 import { useState } from "react";
 import { Chessboard } from "react-chessboard";
 
-import { NOTATION_TOGGLE } from "@src/events/controls";
+import { NOTATION_TOGGLE, ORIENTATION_TOGGLE } from "@src/events/controls";
 import { positionService } from "@src/services/position";
 import { handleSquareClick } from "@src/handlers/handleSquareClick";
 
 export function Board() {
   const [hideNotation, setHideNotation] = useState(false);
+  const [boardOrientation, setBoardOrientation] = useState("white");
 
   useWhileMounted(() =>
     defaultBus.listen(NOTATION_TOGGLE, ({ payload: hide }) => {
       setHideNotation(hide);
+    })
+  );
+
+  useWhileMounted(() =>
+    defaultBus.listen(ORIENTATION_TOGGLE, ({ payload: isBlack }) => {
+      setBoardOrientation(isBlack ? "black" : "white");
     })
   );
 
@@ -30,6 +37,7 @@ export function Board() {
         position={position}
         onSquareClick={handleSquareClick}
         showBoardNotation={!hideNotation}
+        boardOrientation={boardOrientation}
       />
     </div>
   );

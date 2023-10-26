@@ -1,7 +1,4 @@
-import {
-  createService,
-  ReducerProducer,
-} from "@rxfx/service";
+import { createService, ReducerProducer } from "@rxfx/service";
 import { Chess } from "chess.js";
 
 const PIECES = "QRNB";
@@ -11,7 +8,7 @@ const random = (arr) => arr[Math.floor(Math.random() * arr.length)];
 const COLOR = "w";
 const chessjs = new Chess();
 export const pronounceSquare = (square) => {
-  const file = square[0] === "a" ? "ae" : square[0];
+  const file = square[0].toUpperCase();
   const rank = square[1];
   return `${file} ${rank}`;
 };
@@ -48,7 +45,7 @@ const initialState = {
 };
 
 const positionReducer: ReducerProducer<
-  { piece: string; square: string, setTitle?: boolean },
+  { piece: string; square: string; setTitle?: boolean },
   null,
   null,
   typeof initialState
@@ -65,7 +62,7 @@ const positionReducer: ReducerProducer<
         movesOfSoloPiece(piece, from).includes(target)
       );
 
-            const newTitle = setTitle
+      const newTitle = setTitle
         ? `Move ${pronouncePiece(piece)} from ${square} to ${target}`
         : state.puzzleTitle;
 
@@ -79,7 +76,7 @@ const positionReducer: ReducerProducer<
           solutions,
         },
         target,
-        puzzleTitle: newTitle
+        puzzleTitle: newTitle,
       };
     }
     // else
