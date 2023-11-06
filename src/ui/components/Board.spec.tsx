@@ -1,6 +1,6 @@
 import { describe, it, expect, vi } from "vitest";
 import { act, render } from "@testing-library/react";
-import { NOTATION_TOGGLE } from "@src/events/controls";
+import { NOTATION_HIDE } from "@src/events/controls";
 import { Board } from "./Board";
 import { defaultBus } from "@rxfx/service";
 
@@ -26,7 +26,7 @@ describe(Board, () => {
       );
 
       await act(() => {
-        defaultBus.trigger(NOTATION_TOGGLE(true));
+        defaultBus.trigger(NOTATION_HIDE(true));
       });
 
       // Now assert, it's told not to show

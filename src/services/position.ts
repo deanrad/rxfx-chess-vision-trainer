@@ -1,7 +1,8 @@
-import { createService, ReducerProducer } from "@rxfx/service";
+import { createService, defaultBus, ReducerProducer } from "@rxfx/service";
+import { NB_ONLY } from "@src/events/controls";
 import { Chess } from "chess.js";
 
-const PIECES = "QRNB";
+let PIECES = "QRNB";
 const RANKS = "12345678";
 const FILES = "abcdefgh";
 const random = (arr) => arr[Math.floor(Math.random() * arr.length)];
@@ -117,3 +118,7 @@ function getSecondMoves(piece, initialSquare, firstMoves) {
 }
 
 positionService.state.subscribe(console.log);
+
+defaultBus.listen(NB_ONLY, ({ payload }) => {
+  PIECES = payload ? "NB" : "QRNB";
+});

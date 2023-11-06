@@ -1,7 +1,7 @@
 import { describe, it, expect } from "vitest";
 import { render, screen } from "@testing-library/react";
 import { Controls } from "./Controls";
-import { NOTATION_TOGGLE } from "@src/events/controls";
+import { NOTATION_HIDE } from "@src/events/controls";
 
 describe("Controls", () => {
   it("renders controls", () => {
@@ -23,7 +23,7 @@ describe("Controls", () => {
     toggle1?.click();
 
     expect(seenEvents).toContainEqual({
-      type: NOTATION_TOGGLE.type,
+      type: NOTATION_HIDE.type,
       payload: true,
     });
     // OR:  expect(seenEvents).toContainEqual(NOTATION_TOGGLE(true))
