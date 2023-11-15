@@ -1,6 +1,6 @@
 import { resolve } from "path";
 import { defineConfig } from "vite";
-import { VitePWA } from "vite-plugin-pwa";
+// import { VitePWA } from "vite-plugin-pwa";
 import type { ManifestOptions, VitePWAOptions } from "vite-plugin-pwa";
 import react from "@vitejs/plugin-react-swc";
 
@@ -51,7 +51,10 @@ const pwaOptions: Partial<VitePWAOptions> = {
 // https://vitejs.dev/config/
 export default defineConfig({
   base: "/rxfx/vision/",
-  plugins: [react(), VitePWA(pwaOptions)],
+  plugins: [
+    react(),
+    // VitePWA(pwaOptions)
+  ],
   server: {
     port: 8470,
   },

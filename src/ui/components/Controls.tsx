@@ -9,7 +9,7 @@ import {
 
 export function Controls() {
   return (
-    <div>
+    <div className="controls">
       <div className="control">
         <FormControl display="flex" alignItems="center">
           <Switch

@@ -20,5 +20,5 @@ export const speechEffect = createQueueingEffect<[string, number]>(
 );
 
 export const say = (text: string, rate = 0.9) => {
-  speechEffect.request([text, rate]);
+  return speechEffect.send([text, rate]);
 };

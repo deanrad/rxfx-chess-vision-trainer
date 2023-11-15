@@ -22,19 +22,19 @@ function App() {
   return (
     <ChakraProvider>
       <h1>Chess Vision Trainer</h1>
-      <header className="header">
-        <Controls />
-        <div className="tagline" onClick={() => handleSquareClick("")}>
-          Click or tap for a new puzzle!! ♛
-        </div>
-      </header>
+      <div className="tagline" onClick={() => handleSquareClick("")}>
+        Click or tap for a new puzzle!! ♛
+      </div>
       <Board />
-      <p>
+      <p className="instructions">
         Instructions: With sound on, click or tap to hear a challenge of how to
         move a piece, in algebraic chess notation. Then decide upon and click
         the square the piece must first move to in order to reach the target.
         Try hiding the notation or piece, playing blind, if you dare!
       </p>
+      <header className="header">
+        <Controls />
+      </header>
     </ChakraProvider>
   );
 }
