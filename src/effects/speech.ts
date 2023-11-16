@@ -7,7 +7,10 @@ export const speechEffect = createQueueingEffect<[string, number]>(
       const spoken = new SpeechSynthesisUtterance(text);
       spoken.rate = rate;
 
-      spoken.onend = () => notify.complete();
+      spoken.onend = () => {
+        notify.next();
+        notify.complete();
+      };
 
       // If we just canceled, we need to wait before it'll speak again
       after(THRESHOLD.Debounce).then(() => speechSynthesis.speak(spoken));

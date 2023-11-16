@@ -1,12 +1,14 @@
 import { createMachine, interpret } from "xstate";
+
 import {
   getRandomPiece,
   getRandomSquare,
   positionService,
   pronouncePiece,
   pronounceSquare,
-} from "../services/position";
+} from "@src/services/position";
 
+import { saveTimeLog, timeLogService } from "@src/services/timeLog";
 import { say } from "@src/effects/speech";
 
 const schema = {
@@ -39,6 +41,7 @@ const trainerMachine = createMachine(
         },
       },
       explained: {
+        entry: ["logTime"],
         on: { "challenge.new": "guessable" },
       },
     },
@@ -53,16 +56,23 @@ const trainerMachine = createMachine(
         await positionService.send({
           piece,
           square,
-          setTitle: true
+          setTitle: true,
         });
 
-        const {target} = positionService.state.value;
+        const { target } = positionService.state.value;
 
-        say(`How can you move a
+        await say(`How can you move a
           ${pronouncePiece(piece)} 
           from
           ${pronounceSquare(square)} 
           to ${pronounceSquare(target)}?`);
+
+        timeLogService.request();
+      },
+      logTime() {
+        timeLogService.cancelCurrent();
+        // TODO include the state of the controls in the time log
+        saveTimeLog(timeLogService.state.value);
       },
     },
   }
