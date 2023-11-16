@@ -27,6 +27,7 @@ export const timerService = createBlockingService<void, number, Error, number>(
 export type TimeLog = (typeof controlsService)["state"]["value"] & {
   piece: string;
   duration: number;
+  solvedAt: number;
 };
 
 const LOCAL_STORAGE_KEY = "timeLog";
@@ -66,7 +67,12 @@ export function saveTimeLog(
   controls: (typeof controlsService)["state"]["value"],
   piece: string
 ) {
-  const toLog: TimeLog = { ...controls, piece, duration: seconds };
+  const toLog: TimeLog = {
+    ...controls,
+    piece,
+    duration: seconds,
+    solvedAt: Date.now(),
+  };
   console.log(`Puzzle Solution`, toLog);
   timeLogService.request(toLog);
 }
