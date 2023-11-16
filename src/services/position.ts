@@ -1,4 +1,4 @@
-import { createService, defaultBus, ReducerProducer } from "@rxfx/service";
+import { BehaviorSubject, createService, defaultBus, ReducerProducer } from "@rxfx/service";
 import { NB_ONLY } from "@src/events/controls";
 import { Chess } from "chess.js";
 
@@ -32,9 +32,10 @@ export const squareColor = (square) => chessjs.squareColor(square);
 export const getRandomSquare = () => `${random(FILES)}${random(RANKS)}`;
 export const getRandomPiece = () => `${COLOR}${random(PIECES)}`;
 
+export const currentPiece = new BehaviorSubject<string>("");
+
 const initialState = {
   position: {
-    // b7: "wR",
   },
   moves: {
     first: [],

@@ -6,9 +6,12 @@ import {
   positionService,
   pronouncePiece,
   pronounceSquare,
+  currentPiece,
 } from "@src/services/position";
 
-import { saveTimeLog, timeLogService } from "@src/services/timeLog";
+import { saveTimeLog, timerService } from "@src/services/timeLog";
+import { controlsService } from "@src/services/controls";
+
 import { say } from "@src/effects/speech";
 
 const schema = {
@@ -53,6 +56,7 @@ const trainerMachine = createMachine(
       async beginChallenge() {
         const [piece, square] = [getRandomPiece(), getRandomSquare()];
 
+        currentPiece.next(piece);
         await positionService.send({
           piece,
           square,
@@ -67,12 +71,16 @@ const trainerMachine = createMachine(
           ${pronounceSquare(square)} 
           to ${pronounceSquare(target)}?`);
 
-        timeLogService.request();
+        timerService.request();
       },
       logTime() {
-        timeLogService.cancelCurrent();
-        // TODO include the state of the controls in the time log
-        saveTimeLog(timeLogService.state.value);
+        timerService.cancelCurrent();
+
+        saveTimeLog(
+          timerService.state.value,
+          controlsService.state.value,
+          currentPiece.value[1]
+        );
       },
     },
   }
