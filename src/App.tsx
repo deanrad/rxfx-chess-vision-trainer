@@ -1,11 +1,13 @@
 import { ChakraProvider } from "@chakra-ui/react";
-import { useWhileMounted } from "@rxfx/react";
+import { useService, useWhileMounted } from "@rxfx/react";
 import { defaultBus } from "@rxfx/service";
+import { BLINDFOLD_ON } from "@src/events/controls";
+import { handleSquareClick } from "@src/handlers/handleSquareClick";
+import { historyModal } from "@src/services/historyModal";
+import { Board } from "@src/ui/components/Board";
+import { Controls } from "@src/ui/components/Controls";
+import { HistoryModal } from "@src/ui/components/HistoryModal";
 import "./App.css";
-import { BLINDFOLD_ON } from "./events/controls";
-import { handleSquareClick } from "./handlers/handleSquareClick";
-import { Board } from "./ui/components/Board";
-import { Controls } from "./ui/components/Controls";
 
 function App() {
   useWhileMounted(() =>
@@ -19,9 +21,20 @@ function App() {
     })
   );
 
+  const { isActive: showingModal } = useService(historyModal);
+
   return (
     <ChakraProvider>
       <h1>Chess Vision Trainer</h1>
+      <span
+        style={{ float: "right", fontSize: "200%" }}
+        onClick={() => {
+          showingModal ? historyModal.cancelCurrent() : historyModal.request();
+        }}
+      >
+        🕓
+      </span>
+      {showingModal && <HistoryModal />}
       <div className="tagline" onClick={() => handleSquareClick("")}>
         Click or tap for a new puzzle!! ♛
       </div>

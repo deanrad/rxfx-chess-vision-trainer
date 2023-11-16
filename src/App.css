@@ -40,3 +40,15 @@
 .instructions {
   padding: 1rem;
 }
+
+.history-modal {
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -48%);
+  z-index: 100;
+  border: 1px solid black;
+  background-color: white;
+  height: 95vh;
+  width: 95vw;
+  position: absolute;
+}
