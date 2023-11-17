@@ -8,16 +8,12 @@ import { Board } from "@src/ui/components/Board";
 import { Controls } from "@src/ui/components/Controls";
 import { HistoryModal } from "@src/ui/components/HistoryModal";
 import "./App.css";
+import { setPieceVisibility } from "@src/effects/move";
 
 function App() {
   useWhileMounted(() =>
     defaultBus.listen(BLINDFOLD_ON, ({ payload: checked }) => {
-      const visibility = checked ? "hidden" : "visible";
-
-      (document.querySelector("#root") as HTMLElement).style.setProperty(
-        "--piece-visibility",
-        visibility
-      );
+      setPieceVisibility(!checked);
     })
   );
 

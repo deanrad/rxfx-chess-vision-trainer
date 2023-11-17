@@ -8,12 +8,15 @@
     "start": "vite",
     "test": "vitest",
     "build": "vite build",
-    "deploy": "aws s3 cp dist/ s3://www.deanius.com/rxfx/vision --recursive",
+    "s3:deploy": "aws s3 cp dist/ s3://www.deanius.com/rxfx/vision --recursive",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
-    "generate-pwa-assets": "pwa-assets-generator"
+    "generate-pwa-assets": "pwa-assets-generator",
+    "cloudfront:invalidate": "aws cloudfront create-invalidation --distribution-id EBOA3GQNFJZP8 --paths '/rxfx/vision/*'",
+    "deploy": "yarn build; yarn s3:deploy; yarn run cloudfront:invalidate"
   },
   "dependencies": {
+    "@chakra-ui/icons": "^2.1.1",
     "@chakra-ui/react": "^2.8.1",
     "@emotion/react": "^11",
     "@emotion/styled": "^11",
@@ -26,6 +29,8 @@
     "react": "^18.2.0",
     "react-chessboard": "^4.2.3",
     "react-dom": "^18.2.0",
+    "react-icons": "^4.12.0",
+    "react-table": "^7.8.0",
     "xstate": "^4.38.2"
   },
   "devDependencies": {
