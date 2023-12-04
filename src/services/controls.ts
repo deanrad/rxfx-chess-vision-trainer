@@ -1,4 +1,4 @@
-import { createService, skip } from "@rxfx/service";
+import { createRequestMergeReducer, createService, skip } from "@rxfx/service";
 
 const initialSettings = {
   NOTATION_HIDE: false,
@@ -6,24 +6,13 @@ const initialSettings = {
   ORIENTATION_BLACK: false,
   NB_ONLY: false,
 };
-type SETTING = keyof typeof initialSettings;
 
 export const controlsService = createService<
-  Partial<Record<SETTING, boolean>>,
-  void,
+  Partial<typeof initialSettings>,
+  Partial<typeof initialSettings>,
   Error,
-  Record<SETTING, boolean>
->(
-  "controls",
-  () => {},
-  (ACs) =>
-    (current = initialSettings, event) => {
-      if (ACs.request.match(event)) {
-        return { ...current, ...event.payload };
-      }
-      return current;
-    }
-);
+  typeof initialSettings
+>("controls", () => {}, createRequestMergeReducer(initialSettings));
 
 const LOCAL_STORAGE_KEY = "vision-controls";
 
