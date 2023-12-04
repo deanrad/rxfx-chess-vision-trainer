@@ -20,27 +20,20 @@ function App() {
     })
   );
 
-  useWhileMounted(() =>
-    // defaultBus.spy(({ type, payload }) => console.log(type, payload))
-    fontSizeService.state.subscribe((size) => {
-      document
-        .getElementById("root")!
-        .style.setProperty("--notation-font-size", size);
-    })
-  );
 
   const { isActive: showingModal } = useService(historyModal);
 
   return (
     <ChakraProvider>
-      <h1>
+      <h2>
         ♘ Vision Trainer
         <IconButton
           aria-label="Options"
+          className ="options-button"
           icon={<HamburgerIcon />}
           onClick={() => historyModal.request()}
         />
-      </h1>
+      </h2>
       <div className="contents">
         {showingModal && <OptionsModal />}
 

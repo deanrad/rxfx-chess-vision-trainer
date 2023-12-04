@@ -16,6 +16,7 @@ export function Board() {
     "white"
   );
   const [windowHeight, windowWidth] = useSubject(windowSizeHW);
+  const isLandscape = windowWidth > windowHeight;
 
   useWhileMounted(() =>
     defaultBus.listen(NOTATION_HIDE, ({ payload: hide }) => {
@@ -26,6 +27,15 @@ export function Board() {
   useWhileMounted(() =>
     defaultBus.listen(ORIENTATION_BLACK, ({ payload: isBlack }) => {
       setBoardOrientation(isBlack ? "black" : "white");
+    })
+  );
+
+  useWhileMounted(() =>
+    fontSizeService.state.subscribe((size) => {
+      const fontSize = isLandscape ? size * 2 : size;
+      document
+        .getElementById("root")!
+        .style.setProperty("--notation-font-size", `${fontSize}rem`);
     })
   );
 
@@ -42,9 +52,7 @@ export function Board() {
         onSquareClick={handleSquareClick}
         showBoardNotation={!hideNotation}
         boardOrientation={boardOrientation}
-        boardWidth={
-          windowWidth > windowHeight ? windowHeight - 50 : windowWidth
-        }
+        boardWidth={(isLandscape ? windowHeight : windowWidth) - 10}
       />
     </div>
   );
