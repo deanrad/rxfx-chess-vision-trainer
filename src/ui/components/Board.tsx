@@ -9,6 +9,7 @@ import { handleSquareClick } from "@src/handlers/handleSquareClick";
 import { THRESHOLD } from "@rxfx/perception";
 import { windowSizeHW } from "@src/services/windowSize";
 import { fontSizeService } from "@src/services/fontSizeService";
+import { controlsService } from "@src/services/controls";
 
 export function Board() {
   const [hideNotation, setHideNotation] = useState(false);
@@ -19,14 +20,9 @@ export function Board() {
   const isLandscape = windowWidth > windowHeight;
 
   useWhileMounted(() =>
-    defaultBus.listen(NOTATION_HIDE, ({ payload: hide }) => {
-      setHideNotation(hide);
-    })
-  );
-
-  useWhileMounted(() =>
-    defaultBus.listen(ORIENTATION_BLACK, ({ payload: isBlack }) => {
-      setBoardOrientation(isBlack ? "black" : "white");
+    controlsService.state.subscribe((state) => {
+      setHideNotation(state.NOTATION_HIDE);
+      setBoardOrientation(state.ORIENTATION_BLACK ? "black" : "white");
     })
   );
 

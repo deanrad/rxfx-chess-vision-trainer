@@ -1,13 +1,10 @@
 import { FormControl, FormLabel, Switch } from "@chakra-ui/react";
-import { defaultBus } from "@rxfx/service";
-import {
-  NOTATION_HIDE,
-  BLINDFOLD_ON,
-  ORIENTATION_BLACK,
-  NB_ONLY,
-} from "@src/events/controls";
+import { useService } from "@rxfx/react";
+import { controlsService } from "@src/services/controls";
 
 export function Controls() {
+  const { state } = useService(controlsService);
+
   return (
     <div className="controls">
       <div className="control">
@@ -15,8 +12,11 @@ export function Controls() {
           <Switch
             id="hide-notation"
             data-testid="hide-notation"
+            isChecked={state.NOTATION_HIDE}
             onChange={({ target }) =>
-              defaultBus.trigger(NOTATION_HIDE(target.checked))
+              controlsService.request({
+                NOTATION_HIDE: target.checked,
+              })
             }
           />
           <FormLabel htmlFor="hide-notation" mb="0" ml="2">
@@ -29,8 +29,11 @@ export function Controls() {
         <FormControl display="flex" alignItems="center">
           <Switch
             id="blindfold-mode"
+            isChecked={state.BLINDFOLD_ON}
             onChange={({ target }) =>
-              defaultBus.trigger(BLINDFOLD_ON(target.checked))
+              controlsService.request({
+                BLINDFOLD_ON: target.checked,
+              })
             }
           />
           <FormLabel htmlFor="blindfold-mode" mb="0" ml="2">
@@ -43,8 +46,11 @@ export function Controls() {
         <FormControl display="flex" alignItems="center">
           <Switch
             id="orientation"
+            isChecked={state.ORIENTATION_BLACK}
             onChange={({ target }) =>
-              defaultBus.trigger(ORIENTATION_BLACK(target.checked))
+              controlsService.request({
+                ORIENTATION_BLACK: target.checked,
+              })
             }
           />
           <FormLabel htmlFor="orientation" mb="0" ml="2">
@@ -58,8 +64,11 @@ export function Controls() {
           <Switch
             id="use-nb"
             data-testid="use-nb"
+            isChecked={state.NB_ONLY}
             onChange={({ target }) =>
-              defaultBus.trigger(NB_ONLY(target.checked))
+              controlsService.request({
+                NB_ONLY: target.checked,
+              })
             }
           />
           <FormLabel htmlFor="use-nb" mb="0" ml="2">

@@ -1,25 +1,22 @@
 import { ChakraProvider, IconButton } from "@chakra-ui/react";
 
 import { useService, useWhileMounted } from "@rxfx/react";
-import { defaultBus } from "@rxfx/service";
-import { BLINDFOLD_ON } from "@src/events/controls";
 import { historyModal } from "@src/services/historyModal";
 import { Board } from "@src/ui/components/Board";
 import { Controls } from "@src/ui/components/Controls";
-import { HistoryModal } from "@src/ui/components/HistoryModal";
 import "./App.css";
 import { setPieceVisibility } from "@src/effects/move";
 import { fontSizeService } from "./services/fontSizeService";
 import { HamburgerIcon } from "@chakra-ui/icons";
 import { OptionsModal } from "./ui/components/OptionsModal";
+import { controlsService } from "./services/controls";
 
 function App() {
   useWhileMounted(() =>
-    defaultBus.listen(BLINDFOLD_ON, ({ payload: checked }) => {
-      setPieceVisibility(!checked);
+    controlsService.state.subscribe((state) => {
+      setPieceVisibility(!state.BLINDFOLD_ON);
     })
   );
-
 
   const { isActive: showingModal } = useService(historyModal);
 
@@ -29,7 +26,7 @@ function App() {
         ♘ Vision Trainer
         <IconButton
           aria-label="Options"
-          className ="options-button"
+          className="options-button"
           icon={<HamburgerIcon />}
           onClick={() => historyModal.request()}
         />

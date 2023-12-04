@@ -1,10 +1,4 @@
-import { createService, defaultBus, matchesAny } from "@rxfx/service";
-import {
-  BLINDFOLD_ON,
-  NOTATION_HIDE,
-  NB_ONLY,
-  ORIENTATION_BLACK,
-} from "@src/events/controls";
+import { createService } from "@rxfx/service";
 
 const initialSettings = {
   NOTATION_HIDE: false,
@@ -31,13 +25,4 @@ export const controlsService = createService<
     }
 );
 
-// controlsService.request({ NOTATION_HIDE: false });
-
 controlsService.state.subscribe(console.log);
-
-defaultBus.listen(
-  matchesAny(NOTATION_HIDE, BLINDFOLD_ON, ORIENTATION_BLACK, NB_ONLY),
-  (event) => {
-    controlsService.request({ [event.type]: event.payload });
-  }
-);

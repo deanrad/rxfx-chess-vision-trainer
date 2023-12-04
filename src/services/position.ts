@@ -1,6 +1,12 @@
-import { BehaviorSubject, createService, defaultBus, ReducerProducer } from "@rxfx/service";
+import {
+  BehaviorSubject,
+  createService,
+  defaultBus,
+  ReducerProducer,
+} from "@rxfx/service";
 import { NB_ONLY } from "@src/events/controls";
 import { Chess } from "chess.js";
+import { controlsService } from "./controls";
 
 let PIECES = "QRNB";
 const RANKS = "12345678";
@@ -35,8 +41,7 @@ export const getRandomPiece = () => `${COLOR}${random(PIECES)}`;
 export const currentPiece = new BehaviorSubject<string>("");
 
 const initialState = {
-  position: {
-  },
+  position: {},
   moves: {
     first: [],
     second: [],
@@ -119,7 +124,6 @@ function getSecondMoves(piece, initialSquare, firstMoves) {
 }
 
 positionService.state.subscribe(console.log);
-
-defaultBus.listen(NB_ONLY, ({ payload }) => {
-  PIECES = payload ? "NB" : "QRNB";
+controlsService.state.subscribe((state) => {
+  PIECES = state.NB_ONLY ? "NB" : "QRNB";
 });
