@@ -1,15 +1,15 @@
 import { after, concat, createBlockingEffect } from "@rxfx/service";
 import { THRESHOLD } from "@rxfx/perception";
 import { positionService } from "@src/services/position";
+import { controlsService } from "@src/services/controls";
 
-export const setPieceVisibility = (isVisibile: boolean)=> {
+export const setPieceVisibility = (isVisibile: boolean) => {
   const visibility = !isVisibile ? "hidden" : "visible";
   (document.querySelector("#root") as HTMLElement).style.setProperty(
     "--piece-visibility",
     visibility
   );
-
-}
+};
 export const moveEffect = createBlockingEffect<{
   piece: string;
   moves: string[];
@@ -23,7 +23,7 @@ export const moveEffect = createBlockingEffect<{
       positionService.request({ piece, square: step2 });
     }),
     after(THRESHOLD.DeepBreath, () => {
-      setPieceVisibility(false)
+      setPieceVisibility(!controlsService.state.value.BLINDFOLD_ON);
     })
   );
 });
