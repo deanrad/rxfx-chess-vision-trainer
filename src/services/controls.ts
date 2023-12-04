@@ -1,4 +1,4 @@
-import { createService } from "@rxfx/service";
+import { createService, skip } from "@rxfx/service";
 
 const initialSettings = {
   NOTATION_HIDE: false,
@@ -25,4 +25,16 @@ export const controlsService = createService<
     }
 );
 
-controlsService.state.subscribe(console.log);
+const LOCAL_STORAGE_KEY = "vision-controls";
+
+// Load from local storage on startup
+const savedControls = localStorage.getItem(LOCAL_STORAGE_KEY);
+if (savedControls) {
+  controlsService.request(JSON.parse(savedControls));
+}
+
+// Persist changes to local storage, skipping current, doing only future
+controlsService.state.pipe(skip(1)).subscribe((controls) => {
+  console.log(controls);
+  localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(controls));
+});

@@ -10,6 +10,7 @@ import {
 } from "@chakra-ui/modal";
 import { historyModal } from "@src/services/historyModal";
 import { HistoryModal } from "./HistoryModal";
+import { Controls } from "./Controls";
 
 export function OptionsModal() {
   return (
@@ -21,11 +22,13 @@ export function OptionsModal() {
           historyModal.cancelCurrent();
         }}
       >
-        <ModalOverlay />
+        {/* <ModalOverlay /> doesnt fill the screen */}
         <ModalContent maxWidth="95vw">
           <ModalHeader>Vision Trainer Options</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
+            <Controls />
+
             <HistoryModal />
           </ModalBody>
 
