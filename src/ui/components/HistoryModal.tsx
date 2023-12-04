@@ -2,6 +2,7 @@ import React from "react";
 import {
   Box,
   Flex,
+  ModalHeader,
   Select,
   Table,
   TableContainer,
@@ -131,17 +132,7 @@ export function HistoryModal() {
 
   return (
     <div className="history-modal">
-      <h2>
-        History{" "}
-        <button
-          className="history-modal-close"
-          onClick={() => {
-            historyModal.cancelCurrent();
-          }}
-        >
-          <CloseIcon />
-        </button>
-      </h2>
+      <ModalHeader>History</ModalHeader>
 
       <TableContainer>
         <Table variant={"simple"} size="md" {...getTableProps()}>
