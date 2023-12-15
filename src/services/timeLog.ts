@@ -1,7 +1,7 @@
 import { after, createBlockingService } from "@rxfx/service";
 import { interval } from "rxjs";
 import { map } from "rxjs/operators";
-import { controlsService } from "./controls";
+import { DIFFICULTIES, controlsService } from "./controls";
 
 const TICK_DURATION_MSEC = 100;
 
@@ -27,6 +27,7 @@ export const timerService = createBlockingService<void, number, Error, number>(
 export type TimeLog = (typeof controlsService)["state"]["value"] & {
   piece: string;
   duration: number;
+  difficulty: number;
   solvedAt: number;
 };
 
@@ -62,15 +63,23 @@ export const timeLogService = createBlockingService<
 timeLogService.state.subscribe((s) => {
   console.log("timeLogs", s);
 });
+
 export function saveTimeLog(
   seconds: number,
   controls: (typeof controlsService)["state"]["value"],
   piece: string
 ) {
+  const difficulty = Object.entries(controls).reduce(
+    (score, [controlKey, isSet]) =>
+      score + (isSet ? DIFFICULTIES[controlKey] : 0),
+    1
+  );
+
   const toLog: TimeLog = {
     ...controls,
     piece,
     duration: seconds,
+    difficulty,
     solvedAt: Date.now(),
   };
   console.log(`Puzzle Solution`, toLog);

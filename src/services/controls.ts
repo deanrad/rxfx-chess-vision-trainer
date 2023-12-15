@@ -8,6 +8,14 @@ const initialSettings = {
   NB_ONLY: false,
 };
 
+export const DIFFICULTIES = {
+  NB_ONLY: 1,
+  HIDE_TARGET: 1,
+  ORIENTATION_BLACK: 2,
+  NOTATION_HIDE: 4,
+  BLINDFOLD_ON: 8,
+};
+
 export const controlsService = createService<
   Partial<typeof initialSettings>,
   Partial<typeof initialSettings>,

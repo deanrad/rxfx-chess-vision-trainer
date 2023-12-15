@@ -55,6 +55,12 @@ const columns = [
     filter: "",
   },
   {
+    Header: "Difficulty",
+    accessor: "difficulty",
+    Filter: "",
+    filter: "",
+  },
+  {
     Header: "Duration",
     accessor: "duration",
     Filter: "",

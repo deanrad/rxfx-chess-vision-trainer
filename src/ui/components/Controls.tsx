@@ -1,12 +1,30 @@
 import { FormControl, FormLabel, Switch } from "@chakra-ui/react";
 import { useService } from "@rxfx/react";
-import { controlsService } from "@src/services/controls";
+import { DIFFICULTIES, controlsService } from "@src/services/controls";
 
 export function Controls() {
   const { state } = useService(controlsService);
 
   return (
     <div className="controls">
+      <div className="control">
+        <FormControl display="flex" alignItems="center">
+          <Switch
+            id="use-nb"
+            data-testid="use-nb"
+            isChecked={state.NB_ONLY}
+            onChange={({ target }) =>
+              controlsService.request({
+                NB_ONLY: target.checked,
+              })
+            }
+          />
+          <FormLabel htmlFor="use-nb" mb="0" ml="2">
+            Use only N,B (+{DIFFICULTIES.NB_ONLY})
+          </FormLabel>
+        </FormControl>
+      </div>
+
       <div className="control">
         <FormControl display="flex" alignItems="center">
           <Switch
@@ -20,7 +38,24 @@ export function Controls() {
             }
           />
           <FormLabel htmlFor="hide-target" mb="0" ml="2">
-            Hide Target Piece
+            Hide Target Piece (+{DIFFICULTIES.HIDE_TARGET})
+          </FormLabel>
+        </FormControl>
+      </div>
+
+      <div className="control">
+        <FormControl display="flex" alignItems="center">
+          <Switch
+            id="orientation"
+            isChecked={state.ORIENTATION_BLACK}
+            onChange={({ target }) =>
+              controlsService.request({
+                ORIENTATION_BLACK: target.checked,
+              })
+            }
+          />
+          <FormLabel htmlFor="orientation" mb="0" ml="2">
+            Show as Black (+{DIFFICULTIES.ORIENTATION_BLACK})
           </FormLabel>
         </FormControl>
       </div>
@@ -38,7 +73,7 @@ export function Controls() {
             }
           />
           <FormLabel htmlFor="hide-notation" mb="0" ml="2">
-            Hide Notation
+            Hide Notation (+{DIFFICULTIES.NOTATION_HIDE})
           </FormLabel>
         </FormControl>
       </div>
@@ -55,42 +90,7 @@ export function Controls() {
             }
           />
           <FormLabel htmlFor="blindfold-mode" mb="0" ml="2">
-            Blindfold Mode
-          </FormLabel>
-        </FormControl>
-      </div>
-
-      <div className="control">
-        <FormControl display="flex" alignItems="center">
-          <Switch
-            id="orientation"
-            isChecked={state.ORIENTATION_BLACK}
-            onChange={({ target }) =>
-              controlsService.request({
-                ORIENTATION_BLACK: target.checked,
-              })
-            }
-          />
-          <FormLabel htmlFor="orientation" mb="0" ml="2">
-            Show as Black
-          </FormLabel>
-        </FormControl>
-      </div>
-
-      <div className="control">
-        <FormControl display="flex" alignItems="center">
-          <Switch
-            id="use-nb"
-            data-testid="use-nb"
-            isChecked={state.NB_ONLY}
-            onChange={({ target }) =>
-              controlsService.request({
-                NB_ONLY: target.checked,
-              })
-            }
-          />
-          <FormLabel htmlFor="use-nb" mb="0" ml="2">
-            Use only N,B
+            Blindfold Mode (+{DIFFICULTIES.BLINDFOLD_ON})
           </FormLabel>
         </FormControl>
       </div>
