@@ -17,10 +17,15 @@ export const moveEffect = createBlockingEffect<{
   return concat(
     after(0, () => {
       setPieceVisibility(true);
-      positionService.request({ piece, square: step1 });
+      positionService.request({ piece, square: step1, expo: true });
     }),
     after(THRESHOLD.Thought, () => {
-      positionService.request({ piece, square: step2 });
+      positionService.request({
+        piece,
+        square: step2,
+        expo: true,
+        final: true,
+      });
     }),
     after(THRESHOLD.DeepBreath, () => {
       setPieceVisibility(!controlsService.state.value.BLINDFOLD_ON);

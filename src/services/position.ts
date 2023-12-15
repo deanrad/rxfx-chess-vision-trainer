@@ -52,7 +52,13 @@ const initialState = {
 };
 
 const positionReducer: ReducerProducer<
-  { piece: string; square: string; setTitle?: boolean },
+  {
+    piece: string;
+    square: string;
+    setTitle?: boolean;
+    expo?: true;
+    final?: true;
+  },
   null,
   null,
   typeof initialState
@@ -60,10 +66,10 @@ const positionReducer: ReducerProducer<
   ({ request }) =>
   (state = initialState, event) => {
     if (request.match(event)) {
-      const { piece, square, setTitle } = event.payload;
+      const { piece, square, setTitle, expo, final } = event.payload;
       const firstMoves = movesOfSoloPiece(piece, square);
       const secondMoves = getSecondMoves(piece, square, firstMoves);
-      const target = random(secondMoves);
+      const target = expo ? state.target : random(secondMoves);
 
       const solutions = firstMoves.filter((from) =>
         movesOfSoloPiece(piece, from).includes(target)
@@ -76,6 +82,7 @@ const positionReducer: ReducerProducer<
       return {
         position: {
           [square]: piece,
+          ...(final ? {} : { [target]: "bP" }),
         },
         moves: {
           first: firstMoves,
