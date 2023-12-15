@@ -2,6 +2,7 @@ import { createRequestMergeReducer, createService, skip } from "@rxfx/service";
 
 const initialSettings = {
   NOTATION_HIDE: false,
+  HIDE_TARGET: false,
   BLINDFOLD_ON: false,
   ORIENTATION_BLACK: false,
   NB_ONLY: false,

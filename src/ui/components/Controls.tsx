@@ -10,6 +10,24 @@ export function Controls() {
       <div className="control">
         <FormControl display="flex" alignItems="center">
           <Switch
+            id="hide-target"
+            data-testid="hide-target"
+            isChecked={state.HIDE_TARGET}
+            onChange={({ target }) =>
+              controlsService.request({
+                HIDE_TARGET: target.checked,
+              })
+            }
+          />
+          <FormLabel htmlFor="hide-target" mb="0" ml="2">
+            Hide Target Piece
+          </FormLabel>
+        </FormControl>
+      </div>
+
+      <div className="control">
+        <FormControl display="flex" alignItems="center">
+          <Switch
             id="hide-notation"
             data-testid="hide-notation"
             isChecked={state.NOTATION_HIDE}

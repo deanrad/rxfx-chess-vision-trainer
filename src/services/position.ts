@@ -75,6 +75,8 @@ const positionReducer: ReducerProducer<
         movesOfSoloPiece(piece, from).includes(target)
       );
 
+      const { HIDE_TARGET } = controlsService.state.value;
+
       const newTitle = setTitle
         ? `Move ${pronouncePiece(piece)} from ${square} to ${target}`
         : state.puzzleTitle;
@@ -82,7 +84,7 @@ const positionReducer: ReducerProducer<
       return {
         position: {
           [square]: piece,
-          ...(final ? {} : { [target]: "bP" }),
+          ...(final || HIDE_TARGET ? {} : { [target]: "bP" }),
         },
         moves: {
           first: firstMoves,
