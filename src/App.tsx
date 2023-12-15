@@ -44,10 +44,10 @@ function App() {
           </button>
         </p>
         <p className="instructions">
-          Instructions: With sound on, click or tap to hear a challenge of how
-          to move a piece, in algebraic chess notation. Then decide upon and
-          click the square the piece must first move to in order to reach the
-          target. Try hiding the notation or piece, playing blind, if you dare!
+          Instructions: With sound on, click or tap to hear/see a challenge of
+          how to move a piece. Click the square the piece must move through to
+          reach the target. See the menu for difficulty adjustments and history!
+          <a href="https://youtu.be/t5ArE0GGCSE">Tutorial</a>
         </p>
         <header className="header"></header>
       </div>

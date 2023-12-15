@@ -38,7 +38,7 @@ const trainerMachine = createMachine(
         always: "guessable",
       },
       guessable: {
-        entry: ["beginChallenge"],
+        entry: ["beginChallenge", "sendChallengeAnalytics"],
         on: {
           "guess.correct": "explained",
         },
@@ -81,6 +81,9 @@ const trainerMachine = createMachine(
           controlsService.state.value,
           currentPiece.value[1]
         );
+      },
+      sendChallengeAnalytics() {
+        gtag("event", "challenge", controlsService.state.value);
       },
     },
   }
