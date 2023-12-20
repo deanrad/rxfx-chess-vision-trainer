@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import {
   Box,
   Flex,
@@ -27,9 +27,10 @@ import {
   useSortBy,
   useTable,
 } from "react-table";
+import { CSVLink } from "react-csv";
 
 import { timeLogService } from "@src/services/timeLog";
-import { useService, useWhileMounted } from "@rxfx/react";
+import { useService, useStableValue, useWhileMounted } from "@rxfx/react";
 
 const datetime = Date.now();
 const formatDate = (datetime: number) => {
@@ -110,7 +111,13 @@ export function SelectColumnFilter({
 }
 
 export function HistoryModal() {
-  const { state: data } = useService(timeLogService);
+  const { state: rawData } = useService(timeLogService);
+  const data = useMemo(() => {
+    return rawData.map((item) => ({
+      ...item,
+      solvedAt: new Date(item.solvedAt).toISOString(),
+    }));
+  }, [rawData]);
 
   useWhileMounted(() => {
     function dismiss(event: KeyboardEvent) {
@@ -139,7 +146,6 @@ export function HistoryModal() {
   return (
     <div className="history-modal">
       <ModalHeader>History</ModalHeader>
-
       <TableContainer>
         <Table variant={"simple"} size="md" {...getTableProps()}>
           <Thead>
@@ -183,6 +189,9 @@ export function HistoryModal() {
           </Tbody>
         </Table>
       </TableContainer>
+      <CSVLink data={data} filename="chess-vision-history.csv">
+        Download
+      </CSVLink>
     </div>
   );
 }
