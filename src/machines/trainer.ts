@@ -65,11 +65,14 @@ const trainerMachine = createMachine(
 
         const { target } = positionService.state.value;
 
-        await say(`How can you move a
+        await say(`
+        ${controlsService.state.value.ORIENTATION_BLACK ? "As black, " : ""}
+        What square can a
           ${pronouncePiece(piece)} 
+          land on 
+          to threaten ${pronounceSquare(target)}
           from
-          ${pronounceSquare(square)} 
-          to ${pronounceSquare(target)}?`);
+          ${pronounceSquare(square)} ?`);
 
         timerService.request();
       },

@@ -1,15 +1,12 @@
 import { useService, useSubject, useWhileMounted } from "@rxfx/react";
-import { after, defaultBus } from "@rxfx/service";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Chessboard } from "react-chessboard";
 
-import { NOTATION_HIDE, ORIENTATION_BLACK } from "@src/events/controls";
-import { positionService } from "@src/services/position";
 import { handleSquareClick } from "@src/handlers/handleSquareClick";
-import { THRESHOLD } from "@rxfx/perception";
-import { windowSizeHW } from "@src/services/windowSize";
-import { fontSizeService } from "@src/services/fontSizeService";
 import { controlsService } from "@src/services/controls";
+import { fontSizeService } from "@src/services/fontSizeService";
+import { positionService } from "@src/services/position";
+import { windowSizeHW } from "@src/services/windowSize";
 
 export function Board() {
   const [hideNotation, setHideNotation] = useState(false);
@@ -39,12 +36,27 @@ export function Board() {
     state: { position, puzzleTitle },
   } = useService(positionService);
 
+  const { state } = useService(controlsService);
+
+  const coloredPosition = Object.entries(position).reduce(
+    (all, [pos, piece]) => {
+      const coloredPiece =
+        // The opposing pawn is already the correct color
+        state.ORIENTATION_BLACK && !(piece as string).endsWith("P")
+          ? (piece as string).replace("w", "b")
+          : piece;
+      all[pos] = coloredPiece;
+      return all;
+    },
+    {}
+  );
+
   return (
     <div>
       <h2 className="puzzle-title">{puzzleTitle}</h2>
       <Chessboard
         id="chessboard"
-        position={position}
+        position={coloredPosition}
         onSquareClick={handleSquareClick}
         showBoardNotation={!hideNotation}
         boardOrientation={boardOrientation}
