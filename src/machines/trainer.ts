@@ -69,10 +69,8 @@ const trainerMachine = createMachine(
         ${controlsService.state.value.ORIENTATION_BLACK ? "As black, " : ""}
         What square can a
           ${pronouncePiece(piece)} 
-          land on 
-          to threaten ${pronounceSquare(target)}
-          from
-          ${pronounceSquare(square)} ?`);
+          use to attack ${pronounceSquare(target)}
+          from ${pronounceSquare(square)} ?`);
 
         timerService.request();
       },

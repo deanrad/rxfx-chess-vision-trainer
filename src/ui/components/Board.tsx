@@ -58,6 +58,10 @@ export function Board() {
         id="chessboard"
         position={coloredPosition}
         onSquareClick={handleSquareClick}
+        onPieceDrop={(_source, target) => {
+          handleSquareClick(target);
+          return true;
+        }}
         showBoardNotation={!hideNotation}
         boardOrientation={boardOrientation}
         boardWidth={(isLandscape ? windowHeight : windowWidth) - 10}
