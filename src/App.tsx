@@ -21,8 +21,8 @@ function App() {
 
   return (
     <ChakraProvider>
-      <h2>
-        ♘ Vision Trainer
+      <h2 style={{ marginTop: "2rem" }}>
+        <b style={{ fontSize: "larger" }}>♘ Chess Vision Trainer ♘</b>
         <IconButton
           aria-label="Options"
           className="options-button"
